@@ -1,27 +1,27 @@
 <div align="center">
 
   <img src="https://i.imgur.com/nI8BZdQ.png" alt="logo" width="200" height="auto" />
-  <h1>HALL-AUDIT-WEBHOOK-TOOGLE</h1>
+  <h1>Audit Webhook Toggle Bot</h1>
   
 <!-- Badges -->
 <p>
   <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/2KU77B0N3S/hll-geofences" alt="contributors" />
+    <img src="https://img.shields.io/github/contributors/hackletloose/hall-audit-webhook-toggle" alt="contributors" />
   </a>
   <a href="">
     <img src="https://img.shields.io/github/last-commit/hackletloose/hall-audit-webhook-toggle" alt="last update" />
   </a>
   <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/network/members">
-    <img src="https://img.shields.io/github/forks/2KU77B0N3S/hll-geofences" alt="forks" />
+    <img src="https://img.shields.io/github/forks/hackletloose/hall-audit-webhook-toggle" alt="forks" />
   </a>
   <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/stargazers">
-    <img src="https://img.shields.io/github/stars/2KU77B0N3S/hll-geofences" alt="stars" />
+    <img src="https://img.shields.io/github/stars/hackletloose/hall-audit-webhook-toggle" alt="stars" />
   </a>
   <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/issues/">
-    <img src="https://img.shields.io/github/issues/2KU77B0N3S/hll-geofences" alt="open issues" />
+    <img src="https://img.shields.io/github/issues/hackletloose/hall-audit-webhook-toggle" alt="open issues" />
   </a>
   <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/2KU77B0N3S/hll-geofences.svg" alt="license" />
+    <img src="https://img.shields.io/github/license/hackletloose/hall-audit-webhook-toggle.svg" alt="license" />
   </a>
 </p>
    
@@ -38,95 +38,134 @@
 
 # Table of Contents
 
+- [About the Project](#audit-webhook-toggle-bot)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Bot](#running-the-bot)
+  - [Local Node.js](#local-nodejs)
+  - [Docker](#docker)
+- [Discord Bot Setup](#discord-bot-setup)
+- [Operational Notes](#operational-notes)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
 
-# HLL CRCON Audit Webhook Toggle Bot
+# Audit Webhook Toggle Bot
 
 A Discord bot that provides a simple interface to enable or disable audit webhooks with a single click, helping avoid Discord rate limits during mass messaging events by toggling webhook configurations via a CRCON server API.
 
 ## Features
-- Sends an embed with "Enable" and "Disable" buttons to a specified Discord channel.
+- Sends an embed with "Aktivieren" (Enable) and "Deaktivieren" (Disable) buttons to a specified Discord channel.
+- Displays the current webhook status ("Webhooks: Enabled" or "Webhooks: Disabled") or a warning if the configuration is unavailable.
 - Fetches and stores the initial webhook configuration from the CRCON server.
-- Allows enabling/disabling audit webhooks with one click to prevent rate limiting during mass messaging.
-- Includes retry logic for Discord login and error handling for API requests.
+- Enables/disables audit webhooks with one click to prevent rate limiting during mass messaging.
+- Includes retry logic for Discord login and robust error handling for API requests.
 - Clears the channel of previous messages before sending the control embed.
+- Disables buttons when their action is not applicable (e.g., "Enable" disabled when webhooks are active).
 
 ## Prerequisites
-- Node.js (v16 or higher recommended)
-- A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications)
-- Access to a CRCON server with an API key
-- A Discord channel ID where the bot will operate
+- Node.js (v16 or higher) for local running, or Docker and Docker Compose for containerized deployment.
+- A Discord bot token from the [Discord Developer Portal](https://discord.com/developers/applications).
+- Access to a CRCON server with an API key.
+- A Discord channel ID where the bot will operate.
 
 ## Installation
-1. Clone or download this repository.
-2. Navigate to the project directory:
+1. Clone or download this repository:
    ```bash
-   cd hall-audit-webhook-toggle-bot
+   git clone https://github.com/hackletloose/hall-audit-webhook-toggle.git
+   cd hall-audit-webhook-toggle
    ```
-3. Install dependencies:
+2. For local running, install dependencies:
    ```bash
    npm install
    ```
-4. Copy the example environment file and fill in your credentials:
+3. For Docker, ensure Docker and Docker Compose are installed (no additional steps needed).
+
+## Configuration
+1. Copy the example environment file:
    ```bash
    cp .env.example .env
    ```
-   Edit `.env` with your values (see [Environment Variables](#environment-variables) below).
+2. Edit `.env` with your values:
+   ```
+   CRCON_SERVER=https://your-crcon-server.com
+   CRCON_API_KEY=your_crcon_api_key
+   DISCORD_TOKEN=your_discord_bot_token
+   CHANNEL_ID=your_discord_channel_id
+   ```
+   - `CRCON_SERVER`: URL of your CRCON server (e.g., `https://crcon.example.com`).
+   - `CRCON_API_KEY`: API key for CRCON server authentication.
+   - `DISCORD_TOKEN`: Discord bot token from the Developer Portal.
+   - `CHANNEL_ID`: ID of the Discord channel for the bot’s embed.
 
-## Environment Variables
-Create a `.env` file in the project root with the following variables:
+## Running the Bot
 
-```
-CRCON_SERVER=https://your-crcon-server.com
-CRCON_API_KEY=your_crcon_api_key
-DISCORD_TOKEN=your_discord_bot_token
-CHANNEL_ID=your_discord_channel_id
-```
-
-- `CRCON_SERVER`: The URL of your CRCON server (e.g., `https://crcon.example.com`).
-- `CRCON_API_KEY`: The API key for authenticating with the CRCON server.
-- `DISCORD_TOKEN`: The Discord bot token from the Discord Developer Portal.
-- `CHANNEL_ID`: The ID of the Discord channel where the bot will send the control embed.
-
-## Usage
-1. Ensure your `.env` file is correctly configured.
+### Local Node.js
+1. Ensure `.env` is configured.
 2. Start the bot:
    ```bash
    npm start
    ```
-3. The bot will:
-   - Log in to Discord.
-   - Clear the specified channel of previous messages.
-   - Send an embed with "Aktivieren" (Enable) and "Deaktivieren" (Disable) buttons.
-4. Interact with the buttons:
-   - **Enable**: Restores the original webhook configuration fetched on startup.
-   - **Disable**: Sets a dummy webhook URL (`https://discord.com/`) to disable audit webhooks.
-5. The bot will respond with a confirmation or error message for each button interaction.
+3. The bot will log in, clear the channel, and send an embed with buttons.
 
-## Project Structure
-- `main.mjs`: The main bot script that handles Discord interactions and CRCON API calls.
-- `package.json`: Defines project dependencies and scripts.
-- `.env.example`: A template for the environment variables file.
-- `.gitignore`: Excludes sensitive and unnecessary files from version control.
+### Docker
+1. Ensure Docker and Docker Compose are installed.
+2. Configure `.env` as above.
+3. Build and run the container:
+   ```bash
+   docker-compose up -d
+   ```
+4. View logs:
+   ```bash
+   docker-compose logs
+   ```
+5. Stop the container:
+   ```bash
+   docker-compose down
+   ```
+6. Rebuild after code changes:
+   ```bash
+   docker-compose up -d --build
+   ```
 
-## Dependencies
-- `discord.js`: For interacting with the Discord API.
-- `node-fetch`: For making HTTP requests to the CRCON server.
-- `dotenv`: For loading environment variables from a `.env` file.
+## Discord Bot Setup
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
+2. Add a bot to the application and copy its token (set as `DISCORD_TOKEN` in `.env`).
+3. Enable the following intents under "Bot":
+   - Guilds
+   - Guild Messages
+   - Message Content
+4. Invite the bot to your server with the following permissions:
+   - View Channel
+   - Send Messages
+   - Manage Messages
+   - Embed Links
+   - Read Message History
+5. Copy the ID of the target channel and set it as `CHANNEL_ID` in `.env`.
+
+## Operational Notes
+- On startup, the bot clears the specified channel and sends an embed with "Aktivieren" (Enable) and "Deaktivieren" (Disable) buttons.
+- The embed shows:
+  - "Webhooks: Enabled" if webhooks are active.
+  - "Webhooks: Disabled" if webhooks are off (e.g., dummy URL or empty config).
+  - A warning if the CRCON config fetch fails, advising to restart or check the server.
+- Buttons are disabled when their action is redundant (e.g., "Enable" disabled if webhooks are enabled).
+- Use the "Deaktivieren" button before mass messaging to avoid Discord rate limits, then "Aktivieren" to restore webhooks.
+- Check logs (`docker-compose logs` or console) for errors if the bot fails to start or respond.
+- If the warning appears, verify the CRCON server URL and API key, or restart the bot.
 
 ## Troubleshooting
-- **Bot fails to log in**: Check your `DISCORD_TOKEN` and ensure the bot has the necessary permissions.
-- **API errors**: Verify the `CRCON_SERVER` URL and `CRCON_API_KEY`. Ensure the CRCON server is accessible.
-- **Channel not found**: Confirm the `CHANNEL_ID` is correct and the bot has access to the channel.
-- **Buttons not working**: Ensure the bot has permissions to manage messages and embed links in the channel.
+- **Bot fails to log in**: Verify `DISCORD_TOKEN` and ensure intents/permissions are enabled in the Developer Portal.
+- **API errors**: Check `CRCON_SERVER` and `CRCON_API_KEY`. Ensure the CRCON server is reachable.
+- **Channel not found**: Confirm `CHANNEL_ID` is correct and the bot has channel access.
+- **Buttons not working**: Ensure the bot has "Manage Messages" and "Embed Links" permissions.
+- **Docker issues**: Verify Docker is running, `.env` exists, and no port conflicts occur.
+- **Warning in embed**: If the webhook config fetch fails, check CRCON server connectivity or restart the container.
 
 ## Contributing
-Feel free to submit issues or pull requests to improve the bot. Ensure any changes are well-documented and tested.
+Submit issues or pull requests to improve the bot. Ensure changes are documented and tested.
 
 ## License
 This project is licensed under the MIT License.
