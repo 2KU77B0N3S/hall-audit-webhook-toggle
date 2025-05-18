@@ -1,3 +1,50 @@
+<div align="center">
+
+  <img src="https://i.imgur.com/nI8BZdQ.png" alt="logo" width="200" height="auto" />
+  <h1>HALL-AUDIT-WEBHOOK-TOOGLE</h1>
+  
+<!-- Badges -->
+<p>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/2KU77B0N3S/hll-geofences" alt="contributors" />
+  </a>
+  <a href="">
+    <img src="https://img.shields.io/github/last-commit/hackletloose/hall-audit-webhook-toggle" alt="last update" />
+  </a>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/network/members">
+    <img src="https://img.shields.io/github/forks/2KU77B0N3S/hll-geofences" alt="forks" />
+  </a>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/stargazers">
+    <img src="https://img.shields.io/github/stars/2KU77B0N3S/hll-geofences" alt="stars" />
+  </a>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/issues/">
+    <img src="https://img.shields.io/github/issues/2KU77B0N3S/hll-geofences" alt="open issues" />
+  </a>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/2KU77B0N3S/hll-geofences.svg" alt="license" />
+  </a>
+</p>
+   
+<h4>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle">Documentation</a>
+  <span> · </span>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/issues/">Report Bug</a>
+  <span> · </span>
+  <a href="https://github.com/hackletloose/hall-audit-webhook-toggle/issues/">Request Feature</a>
+</h4>
+</div>
+
+<br />
+
+# Table of Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
+
 # HLL CRCON Audit Webhook Toggle Bot
 
 A Discord bot that provides a simple interface to enable or disable audit webhooks with a single click, helping avoid Discord rate limits during mass messaging events by toggling webhook configurations via a CRCON server API.
