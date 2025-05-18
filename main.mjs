@@ -105,9 +105,9 @@ async function updateEmbedAndButtons(channel) {
       statusMessage = '⚠️ Warning: Webhook configuration unavailable. Please restart the bot or check CRCON server.';
       embed.setColor('#ff0000');
     } else if (currentConfig.hooks.length === 0 || currentConfig.hooks[0].url === 'https://discord.com/') {
-      statusMessage = 'Webhooks: Disabled';
+      statusMessage = 'Webhook: Disabled';
     } else {
-      statusMessage = 'Webhooks: Enabled';
+      statusMessage = 'Webhook: Enabled';
     }
 
     embed.addFields({ name: 'Status', value: statusMessage });
@@ -186,9 +186,9 @@ client.once('ready', async () => {
       statusMessage = '⚠️ Warning: Webhook configuration unavailable. Please restart the bot or check CRCON server.';
       embed.setColor('#ff0000'); // Red for warning
     } else if (originalWebhookConfig.hooks.length === 0 || originalWebhookConfig.hooks[0].url === 'https://discord.com/') {
-      statusMessage = 'Webhooks: Disabled';
+      statusMessage = 'Webhook: Disabled';
     } else {
-      statusMessage = 'Webhooks: Enabled';
+      statusMessage = 'Webhook: Enabled';
     }
 
     embed.addFields({ name: 'Status', value: statusMessage });
