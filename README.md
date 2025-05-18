@@ -156,7 +156,7 @@ A Discord bot that provides a simple interface to enable or disable audit webhoo
   - "Webhooks: Disabled" if webhooks are off (e.g., dummy URL or empty config).
   - A warning if the CRCON config fetch fails, advising to restart or check the server.
 - Buttons are disabled when their action is redundant (e.g., "Enable" disabled if webhooks are enabled).
-- Use the "Deaktivieren" button before mass messaging to avoid Discord rate limits, then "Aktivieren" to restore webhooks.
+- Use the "Disable" button before mass messaging to avoid Discord rate limits, then "Enable" to restore webhooks.
 - Check logs (`docker-compose logs` or console) for errors if the bot fails to start or respond.
 - If the warning appears, verify the CRCON server URL and API key, or restart the bot.
 
