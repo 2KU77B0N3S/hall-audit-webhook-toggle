@@ -57,7 +57,7 @@
 A Discord bot that provides a simple interface to enable or disable audit webhooks with a single click, helping avoid Discord rate limits during mass messaging events by toggling webhook configurations via a CRCON server API.
 
 ## Features
-- Sends an embed with "Aktivieren" (Enable) and "Deaktivieren" (Disable) buttons to a specified Discord channel.
+- Sends an embed with Enable and Disable buttons to a specified Discord channel.
 - Displays the current webhook status ("Webhooks: Enabled" or "Webhooks: Disabled") or a warning if the configuration is unavailable.
 - Fetches and stores the initial webhook configuration from the CRCON server.
 - Enables/disables audit webhooks with one click to prevent rate limiting during mass messaging.
