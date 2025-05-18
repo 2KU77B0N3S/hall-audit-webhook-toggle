@@ -1,22 +1,29 @@
+# Node.js and npm
 node_modules/
 npm-debug.log
 package-lock.json
 
+# Environment variables
 .env
 
+# Logs
 logs/
 *.log
 
+# IDE and editor files
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
 
+# OS generated files
 .DS_Store
 Thumbs.db
 
+# Build and dist
 dist/
 build/
 
-*.tmp
-*.temp
+# Docker
+Dockerfile.local
+*.dockerignore
