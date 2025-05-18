@@ -28,7 +28,7 @@ const client = new Client({
 });
 
 let botMessageId = null;
-let webhookConfigOnStartup = null;
+let originalWebhookConfig = null;
 
 async function getAuditWebhooksConfig() {
   try {
@@ -89,6 +89,52 @@ async function setAuditWebhooksConfig(config, by = 'DiscordBot') {
   }
 }
 
+async function updateEmbedAndButtons(channel) {
+  try {
+    const currentConfig = await getAuditWebhooksConfig();
+
+    const embed = new EmbedBuilder()
+      .setTitle('Audit Webhook Start/Stop')
+      .setColor('#0099ff')
+      .setTimestamp();
+
+    let statusMessage = '';
+    let isConfigValid = currentConfig && currentConfig.hooks && currentConfig.hooks.length > 0;
+
+    if (!currentConfig || !currentConfig.hooks) {
+      statusMessage = '⚠️ Warning: Webhook configuration unavailable. Please restart the bot or check CRCON server.';
+      embed.setColor('#ff0000');
+    } else if (currentConfig.hooks.length === 0 || currentConfig.hooks[0].url === 'https://discord.com/') {
+      statusMessage = 'Webhooks: Disabled';
+    } else {
+      statusMessage = 'Webhooks: Enabled';
+    }
+
+    embed.addFields({ name: 'Status', value: statusMessage });
+
+    const enableButton = new ButtonBuilder()
+      .setCustomId('enable_audit')
+      .setLabel('Enable')
+      .setStyle(ButtonStyle.Success)
+      .setDisabled(currentConfig.hooks[0]?.url !== 'https://discord.com/' && isConfigValid);
+
+    const disableButton = new ButtonBuilder()
+      .setCustomId('disable_audit')
+      .setLabel('Disable')
+      .setStyle(ButtonStyle.Danger)
+      .setDisabled(!isConfigValid || currentConfig.hooks[0]?.url === 'https://discord.com/');
+
+    const row = new ActionRowBuilder().addComponents(enableButton, disableButton);
+
+    const message = await channel.messages.fetch(botMessageId);
+    await message.edit({ embeds: [embed], components: [row] });
+    console.log('Embed and buttons updated');
+  } catch (error) {
+    console.error('Error updating embed and buttons:', error.message);
+    throw error;
+  }
+}
+
 async function loginWithRetry(client, token, retries = 3, delay = 5000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -113,10 +159,10 @@ client.once('ready', async () => {
 
   try {
     try {
-      webhookConfigOnStartup = await getAuditWebhooksConfig();
+      originalWebhookConfig = await getAuditWebhooksConfig();
     } catch (error) {
       console.error('Failed to fetch webhook config on startup, continuing without it:', error.message);
-      webhookConfigOnStartup = null;
+      originalWebhookConfig = null;
     }
 
     const channel = await client.channels.fetch(CHANNEL_ID);
@@ -134,12 +180,12 @@ client.once('ready', async () => {
       .setTimestamp();
 
     let statusMessage = '';
-    let isConfigValid = webhookConfigOnStartup && webhookConfigOnStartup.hooks && webhookConfigOnStartup.hooks.length > 0;
-    
-    if (!webhookConfigOnStartup || !webhookConfigOnStartup.hooks) {
+    let isConfigValid = originalWebhookConfig && originalWebhookConfig.hooks && originalWebhookConfig.hooks.length > 0;
+
+    if (!originalWebhookConfig || !originalWebhookConfig.hooks) {
       statusMessage = '⚠️ Warning: Webhook configuration unavailable. Please restart the bot or check CRCON server.';
       embed.setColor('#ff0000'); // Red for warning
-    } else if (webhookConfigOnStartup.hooks.length === 0 || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/') {
+    } else if (originalWebhookConfig.hooks.length === 0 || originalWebhookConfig.hooks[0].url === 'https://discord.com/') {
       statusMessage = 'Webhooks: Disabled';
     } else {
       statusMessage = 'Webhooks: Enabled';
@@ -151,12 +197,13 @@ client.once('ready', async () => {
       .setCustomId('enable_audit')
       .setLabel('Enable')
       .setStyle(ButtonStyle.Success)
+      .setDisabled(originalWebhookConfig?.hooks[0]?.url !== 'https://discord.com/' && isConfigValid);
 
     const disableButton = new ButtonBuilder()
       .setCustomId('disable_audit')
       .setLabel('Disable')
       .setStyle(ButtonStyle.Danger)
-      .setDisabled(!isConfigValid || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/');
+      .setDisabled(!isConfigValid || originalWebhookConfig?.hooks[0]?.url === 'https://discord.com/');
 
     const row = new ActionRowBuilder().addComponents(enableButton, disableButton);
 
@@ -179,14 +226,14 @@ client.on('interactionCreate', async (interaction) => {
   await interaction.deferReply({ flags: 64 });
 
   try {
+    const channel = interaction.channel;
     if (interaction.customId === 'enable_audit') {
-      if (!webhookConfigOnStartup) {
+      if (!originalWebhookConfig) {
         throw new Error('Webhook configuration not available. Please restart the bot.');
       }
-      const result = await setAuditWebhooksConfig(webhookConfigOnStartup, interaction.user.tag);
-      await interaction.editReply({
-        content: result ? 'Audit webhook enabled successfully!' : 'Failed to enable audit webhook.',
-      });
+      await setAuditWebhooksConfig(originalWebhookConfig, interaction.user.tag);
+      await interaction.editReply({ content: 'Audit webhook enabled successfully!', flags: 64 });
+      await updateEmbedAndButtons(channel);
     } else if (interaction.customId === 'disable_audit') {
       const disableConfig = {
         hooks: [
@@ -195,13 +242,13 @@ client.on('interactionCreate', async (interaction) => {
           },
         ],
       };
-      const result = await setAuditWebhooksConfig(disableConfig, interaction.user.tag);
-      await interaction.editReply({
-        content: result ? 'Audit webhook disabled successfully!' : 'Failed to disable audit webhook.',
-      });
+      await setAuditWebhooksConfig(disableConfig, interaction.user.tag);
+      await interaction.editReply({ content: 'Audit webhook disabled successfully!', flags: 64 });
+      await updateEmbedAndButtons(channel);
     }
   } catch (error) {
-    await interaction.editReply({ content: `Error: ${error.message}` });
+    console.error(`Error handling ${interaction.customId}:`, error.message);
+    await interaction.editReply({ content: `Error: ${error.message}`, flags: 64 });
   }
 });
 
