@@ -136,12 +136,14 @@ client.once('ready', async () => {
     const enableButton = new ButtonBuilder()
       .setCustomId('enable_audit')
       .setLabel('Enable')
-      .setStyle(ButtonStyle.Success);
+      .setStyle(ButtonStyle.Success)
+      .setDisabled(webhookConfigOnStartup && webhookConfigOnStartup.hooks.length > 0);
 
     const disableButton = new ButtonBuilder()
       .setCustomId('disable_audit')
       .setLabel('Disable')
-      .setStyle(ButtonStyle.Danger);
+      .setStyle(ButtonStyle.Danger)
+      .setDisabled(!webhookConfigOnStartup || webhookConfigOnStartup.hooks.length === 0 || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/');
 
     const row = new ActionRowBuilder().addComponents(enableButton, disableButton);
 
