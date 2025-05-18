@@ -119,19 +119,19 @@ A Discord bot that provides a simple interface to enable or disable audit webhoo
    ```
 4. Build and run the container:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 5. View logs:
    ```bash
-   docker-compose logs
+   docker compose logs
    ```
 6. Stop the container:
    ```bash
-   docker-compose down
+   docker compose down
    ```
 7. Rebuild after code changes:
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
 ## Discord Bot Setup
