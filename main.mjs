@@ -135,12 +135,12 @@ client.once('ready', async () => {
 
     const enableButton = new ButtonBuilder()
       .setCustomId('enable_audit')
-      .setLabel('Aktivieren')
+      .setLabel('Enable')
       .setStyle(ButtonStyle.Success);
 
     const disableButton = new ButtonBuilder()
       .setCustomId('disable_audit')
-      .setLabel('Deaktivieren')
+      .setLabel('Disable')
       .setStyle(ButtonStyle.Danger);
 
     const row = new ActionRowBuilder().addComponents(enableButton, disableButton);
