@@ -151,7 +151,6 @@ client.once('ready', async () => {
       .setCustomId('enable_audit')
       .setLabel('Enable')
       .setStyle(ButtonStyle.Success)
-      .setDisabled(isConfigValid);
 
     const disableButton = new ButtonBuilder()
       .setCustomId('disable_audit')
