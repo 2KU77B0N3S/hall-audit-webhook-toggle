@@ -1,4 +1,4 @@
-# Audit Webhook Toggle Bot
+# HLL CRCON Audit Webhook Toggle Bot
 
 A Discord bot that provides a simple interface to enable or disable audit webhooks with a single click, helping avoid Discord rate limits during mass messaging events by toggling webhook configurations via a CRCON server API.
 
@@ -19,7 +19,7 @@ A Discord bot that provides a simple interface to enable or disable audit webhoo
 1. Clone or download this repository.
 2. Navigate to the project directory:
    ```bash
-   cd audit-webhook-toggle-bot
+   cd hall-audit-webhook-toggle-bot
    ```
 3. Install dependencies:
    ```bash
