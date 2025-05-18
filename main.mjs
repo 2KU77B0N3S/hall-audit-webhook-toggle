@@ -133,17 +133,31 @@ client.once('ready', async () => {
       .setColor('#0099ff')
       .setTimestamp();
 
+    let statusMessage = '';
+    let isConfigValid = webhookConfigOnStartup && webhookConfigOnStartup.hooks && webhookConfigOnStartup.hooks.length > 0;
+    
+    if (!webhookConfigOnStartup || !webhookConfigOnStartup.hooks) {
+      statusMessage = '⚠️ Warning: Webhook configuration unavailable. Please restart the bot or check CRCON server.';
+      embed.setColor('#ff0000'); // Red for warning
+    } else if (webhookConfigOnStartup.hooks.length === 0 || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/') {
+      statusMessage = 'Webhooks: Disabled';
+    } else {
+      statusMessage = 'Webhooks: Enabled';
+    }
+
+    embed.addFields({ name: 'Status', value: statusMessage });
+
     const enableButton = new ButtonBuilder()
       .setCustomId('enable_audit')
       .setLabel('Enable')
       .setStyle(ButtonStyle.Success)
-      .setDisabled(webhookConfigOnStartup && webhookConfigOnStartup.hooks.length > 0);
+      .setDisabled(isConfigValid);
 
     const disableButton = new ButtonBuilder()
       .setCustomId('disable_audit')
       .setLabel('Disable')
       .setStyle(ButtonStyle.Danger)
-      .setDisabled(!webhookConfigOnStartup || webhookConfigOnStartup.hooks.length === 0 || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/');
+      .setDisabled(!isConfigValid || webhookConfigOnStartup.hooks[0].url === 'https://discord.com/');
 
     const row = new ActionRowBuilder().addComponents(enableButton, disableButton);
 
