@@ -113,19 +113,23 @@ A Discord bot that provides a simple interface to enable or disable audit webhoo
 ### Docker
 1. Ensure Docker and Docker Compose are installed.
 2. Configure `.env` as above.
-3. Build and run the container:
+3. Rename the docker compose example:
+   ```bash
+   mv example.docker-compose.yml docker-compose.yml
+   ```
+4. Build and run the container:
    ```bash
    docker-compose up -d
    ```
-4. View logs:
+5. View logs:
    ```bash
    docker-compose logs
    ```
-5. Stop the container:
+6. Stop the container:
    ```bash
    docker-compose down
    ```
-6. Rebuild after code changes:
+7. Rebuild after code changes:
    ```bash
    docker-compose up -d --build
    ```
